@@ -32,7 +32,9 @@ public:
 	ArraySequence<Type>* Concat(Sequence<Type>* list) override;
 	
 	//destructs
-	~ArraySequence() {}
+	~ArraySequence() {
+		delete this->arr;
+	}
 };
 
 
@@ -93,7 +95,9 @@ Sequence<Type>* ArraySequence<Type>::GetSubsequence(int startIndex, int endIndex
 template<typename Type>
 ArraySequence<Type>* ArraySequence<Type>::GetCopy() {
 	ArraySequence<Type>* new_element = new ArraySequence<Type>();
-	new_element->arr = this->arr;
+	for (int i = 0; i < this->GetLength(); ++i) {
+		new_element->Append(this->Get(i));
+	}
 	return new_element;
 }
 //setters
@@ -107,7 +111,7 @@ void ArraySequence<Type>::Swap(int i, int j) {
 template<typename Type>
 void ArraySequence<Type>::Append(Type item) {
 	this->arr->Resize(this->arr->GetSize() + 1);
-	this->arr->Set(item, this->arr->GetSize() - 1);
+	this->arr->Set(this->arr->GetSize() - 1, item);
 }
 
 template<typename Type>

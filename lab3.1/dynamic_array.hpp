@@ -82,7 +82,8 @@ void DynamicArray<Type>::Resize(int newSize) {
 		//throw invalid_argument("Invalid argument");
 	}
 	Type* new_arr = new Type[newSize];
-	memcpy(new_arr, this->arr, newSize * sizeof(Type));
+	if(this->size > 0)
+		memcpy(new_arr, this->arr, newSize * sizeof(Type));
 	this->arr = new_arr;
 	this->size = newSize;
 }

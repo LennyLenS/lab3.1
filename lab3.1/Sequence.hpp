@@ -8,8 +8,8 @@ public:
 	virtual Type GetFirst() const = 0;
 	virtual Type GetLast() const = 0;
 	virtual Type Get(int index) const = 0;
-	virtual Sequence<Type>* GetSubsequence(int startIndex, int endIndex) const = 0;
 	virtual int GetLength() const = 0;
+	virtual Sequence<Type>* GetSubsequence(int startIndex, int endIndex) const = 0;
 	//setters
 	virtual void Swap(int i, int j) = 0;
 	virtual void Append(Type item) = 0;
