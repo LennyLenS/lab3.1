@@ -20,7 +20,7 @@ public:
 	Type Get(int index) const override;
 	int GetLength() const override;
 	Sequence<Type>* GetSubsequence(int startIndex, int endIndex) const override;
-
+	ListSequence<Type>* GetCopy() override;
 	//setters
 	void Swap(int i, int j) override;
 	void Append(Type item) override;
@@ -75,6 +75,15 @@ Sequence<Type>* ListSequence<Type>::GetSubsequence(int startIndex, int endIndex)
 	LinkedList<Type>* cur = this->arr->GetSubList(startIndex, endIndex);
 	ListSequence<Type>* newList = new ListSequence<Type>(cur);
 	return newList;
+}
+
+template<typename Type>
+ListSequence<Type>* ListSequence<Type>::GetCopy() {
+	ListSequence<Type>* new_element = new ListSequence<Type>();
+	for (int i = 0; i < this->GetLength(); ++i) {
+		new_element->Append(this->Get(i));
+	}
+	return new_element;
 }
 
 //setters

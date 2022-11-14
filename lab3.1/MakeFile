@@ -1,9 +1,9 @@
 CC = g++
 CFLAGS = -Wall -g
 
-all: lab3.1
+all: lab3_1
 
-lab3.1: main.o
+lab3_1: main.o
 	$(CC) $(CFLAGS) main.o -o sorts
 
 main.o: main.cpp array_sequence.hpp dynamic_array.hpp linked_list.hpp Sequence.hpp BubbleSort.hpp ISorter.hpp ChoosenSort.hpp Qsort.hpp
