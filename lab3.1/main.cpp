@@ -5,6 +5,7 @@
 #include <thread>
 #include <mutex>
 #include <queue>
+#include <regex>
 #include "array_sequence.hpp"
 #include "list_sequence.hpp"
 #include "BubbleSort.hpp"
@@ -13,6 +14,7 @@
 using namespace std;
 
 typedef struct parametrs {
+	bool help = false;
 	bool quit = false;
 	bool sort = false;
 	bool test = false;
@@ -23,6 +25,16 @@ typedef struct parametrs {
 }parametrs;
 
 parametrs parsing(string s) {
+	parametrs buf;
+	static const regex r("^(help|((sort|test){1}-(as|ls)-(qs|bs|ch|is)-(file|cin){1}(-namefile)?)|quit)$");
+	if (regex_match(s, r)) {
+		if (s.find("help") != -1) {
+			buf.help = true;
+		}
+	}
+}
+
+void sort(parametrs buf) {
 
 }
 
@@ -36,21 +48,33 @@ int main() {
 	std::mutex requests_mutex;
 	thread input([&]()
 		{
-			string s;
-			cin >> s;
-			parametrs buf = parsing(s);
-			cout << s;
-			requests_mutex.lock();
-			requests.push(buf);
-			requests_mutex.unlock();
-
+			parametrs buf;
+			do{
+				string s; 
+				cin >> s;
+				buf = parsing(s);
+				requests_mutex.lock();
+				requests.push(buf);
+				requests_mutex.unlock();
+			} while (buf.quit);
 		});
 	thread sorting([&]()
 		{
-
+			parametrs buf;
+			do {
+				requests_mutex.lock();
+				if (!requests.empty()) {
+					buf = requests.front();
+					requests.pop();
+				}
+				requests_mutex.unlock();
+				sort(buf);
+			} while (buf.quit);
 		});
 	input.join();
 	sorting.join();
+
+
 	std::chrono::time_point<std::chrono::system_clock> start, end;
 	std::chrono::duration<double> elapsed_seconds;
 	srand(time(0));
