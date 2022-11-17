@@ -10,6 +10,10 @@
 *.userosscache
 *.sln.docstates
 
+# objects file
+*.o
+*.exe
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -362,6 +366,3 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# objects file
-*.o
-*.exe
