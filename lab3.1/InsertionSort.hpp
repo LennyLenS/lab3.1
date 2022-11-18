@@ -13,10 +13,13 @@ public:
 template<typename Type>
 Sequence<Type>* InsertionSort<Type>::SortSequence(Sequence<Type>* seq, int(*cmp) (Type, Type)) {
 	Sequence<Type>* newSeq = seq->GetCopy();
-	for (int i = 0; i < newSeq->GetLength(); ++i) {
-		for (int j = 0; j <= i; ++j) {
-			if (!cmp(newSeq->Get(j - 1), newSeq->Get(j))) {
+	for (int i = 1; i < newSeq->GetLength(); ++i) {
+		for (int j = i; j > 0; --j) {
+			if (cmp(newSeq->Get(j), newSeq->Get(j - 1))) {
 				newSeq->Swap(j - 1, j);
+			}
+			else {
+				break;
 			}
 		}
 	}
