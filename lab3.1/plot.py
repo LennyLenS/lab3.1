@@ -1,7 +1,5 @@
-import sys
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+from matplotlib.ticker import *
 
 d: dict[str, list] = {}
 sortes = list();
@@ -21,13 +19,22 @@ with open("result.csv", "r") as f:
                 k += 1
 x = d['size']
 d.pop('size')
+max_time = 0
+fig = plt.figure(figsize = (15, 15))
+arr = list(fig.subplots(len(d)))
+j = 0
 for srt, time in d.items():
-    plt.plot(x, time, label=srt)
+    arr[j].plot(x, time)
+    arr[j].xaxis.set_major_locator(LinearLocator(5))
+    arr[j].yaxis.set_major_locator(LinearLocator(5))
+    arr[j].set_ylabel('time - ms', fontsize = 14)
+    arr[j].set_title(srt)
+    j += 1
 
-plt.xticks(np.arange(int(x[0]), int(x[-1]), 200), fontsize=14)
-plt.xlabel('sequence size')
-plt.ylabel('time - ms')
-plt.legend(loc='upper left')
+
+#ax.set_xticklabels([])
+plt.xlabel("size", fontsize = 20)
+#plt.legend(loc='upper left')
 plt.savefig("result.png")
 
 

@@ -30,7 +30,9 @@ public:
 	Sequence<Type>* Concat(Sequence<Type>* list) override;
 
 	//destructs
-	~ListSequence() {}
+	~ListSequence() {
+		delete this->arr;
+	}
 };
 
 //constructs

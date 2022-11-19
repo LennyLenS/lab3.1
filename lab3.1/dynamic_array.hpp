@@ -23,7 +23,10 @@ public:
 	void Set(int index, Type value);
 	void Resize(int newSize);
 	//destructor
-	~DynamicArray() {}
+	~DynamicArray() {
+		delete [] arr;
+		size = 0;
+	}
 };
 
 //constructs
@@ -84,6 +87,7 @@ void DynamicArray<Type>::Resize(int newSize) {
 	Type* new_arr = new Type[newSize];
 	if(this->size > 0)
 		memcpy(new_arr, this->arr, newSize * sizeof(Type));
+	delete[] this->arr;
 	this->arr = new_arr;
 	this->size = newSize;
 }

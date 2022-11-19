@@ -120,6 +120,7 @@ void sort(parametrs buf, int flag, int n) {
 			else {
 				fout << elapsed_seconds.count() << " ";
 			}
+			delete seq2;
 		}
 
 		if (buf.qsort) {
@@ -138,6 +139,7 @@ void sort(parametrs buf, int flag, int n) {
 			else {
 				fout << elapsed_seconds.count() << " ";
 			}
+			delete seq2;
 		}
 
 		if (buf.insersort) {
@@ -156,6 +158,7 @@ void sort(parametrs buf, int flag, int n) {
 			else {
 				fout << elapsed_seconds.count() << " ";
 			}
+			delete seq2;
 		}
 
 		if (buf.bubblesort) {
@@ -175,8 +178,9 @@ void sort(parametrs buf, int flag, int n) {
 			else {
 				fout << elapsed_seconds.count() << " ";
 			}
+			delete seq2;
 		}
-
+		delete seq;
 	}
 	else {
 		auto seq = new ListSequence<int>();
@@ -317,7 +321,7 @@ void update(parametrs buf) {
 		cout << "Datasetes get!\n";
 		system("plot.py");
 		cout << "Graph complete!\n";
-		//remove("result.csv");
+		remove("result.csv");
 	}
 }
 
