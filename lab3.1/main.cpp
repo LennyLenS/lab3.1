@@ -15,6 +15,8 @@
 #include "Qsort.hpp"
 
 using namespace std;
+using std::cout;
+using std::remove;
 
 typedef struct parametrs {
 	bool help = false;
@@ -88,188 +90,106 @@ parametrs parsing(string s) {
 	return buf;
 }
 
+auto sorter(ISorter<int>* ex_sort, Sequence<int>* seq, std::chrono::duration<double, std::milli> &elapsed_seconds) {
+	auto start = std::chrono::high_resolution_clock::now();
+	auto seq2 = ex_sort->SortSequence(seq, cmp);
+	auto end = std::chrono::high_resolution_clock::now();
+	elapsed_seconds = end - start;
+	return seq2;
+}
+
 void sort(parametrs buf, int flag, int n) {
 	ofstream fout;
+	std::chrono::duration<double, std::milli> elapsed_seconds;
 	if (flag == 2) {
 		fout.open("result.csv", ios::app);
 	}
+
+	Sequence<int> *seq = nullptr;
 	if (buf.arr_seq) {
-		auto seq = new ArraySequence<int>();
-		if (flag == 1) {
-			for (int i = 0; i < buf.vec.size(); ++i) {
-				seq->Append(buf.vec[i]);
-			}
-		} else if (flag == 2) {
-			for (int i = 0; i < n; ++i) {
-				seq->Append(rand());
-			}
-		}
-		if (buf.choosensort) {
-			auto ChSort = new ChoosenSort<int>();
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = ChSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Choosen Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
-			delete seq2;
-		}
-
-		if (buf.qsort) {
-			auto QuickSort = new Qsort<int>();
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = QuickSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Quick Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
-			delete seq2;
-		}
-
-		if (buf.insersort) {
-			auto InsSort = new InsertionSort<int>();
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = InsSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Insertion Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
-			delete seq2;
-		}
-
-		if (buf.bubblesort) {
-			auto BubSort = new BubbleSort<int>();
-
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = BubSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Bubble Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
-			delete seq2;
-		}
-		delete seq;
+		seq = new ArraySequence<int>();
 	}
-	else {
-		auto seq = new ListSequence<int>();
-		if (flag == 1) {
-			for (int i = 0; i < buf.vec.size(); ++i) {
-				seq->Append(buf.vec[i]);
-			}
-		} else if (flag == 2) {
-			for (int i = 0; i < n; ++i) {
-				seq->Append(rand());
-			}
+	else if (buf.list_seq) {
+		seq = new ListSequence<int>();
+	}
+
+	if (flag == 1) {
+		for (int i = 0; i < buf.vec.size(); ++i) {
+			seq->Append(buf.vec[i]);
 		}
-		if (buf.choosensort) {
-			auto ChSort = new ChoosenSort<int>();
-
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = ChSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Choosen Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
-		}
-
-		if (buf.qsort) {
-			auto QuickSort = new Qsort<int>();
-
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = QuickSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Quick Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
-		}
-
-		if (buf.insersort) {
-			auto InsSort = new InsertionSort<int>();
-
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = InsSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Insertion Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
-		}
-
-		if (buf.bubblesort) {
-			auto BubSort = new BubbleSort<int>();
-
-			auto start = std::chrono::high_resolution_clock::now();
-			auto seq2 = BubSort->SortSequence(seq, cmp);
-			auto end = std::chrono::high_resolution_clock::now();
-			std::chrono::duration<double, std::milli> elapsed_seconds = end - start;
-			if (flag == 1) {
-				cout << "Bubble Sort " << elapsed_seconds.count() << "\n";
-				for (int i = 0; i < seq2->GetLength(); ++i) {
-					cout << seq2->Get(i) << " ";
-				}
-				cout << '\n';
-			}
-			else {
-				fout << elapsed_seconds.count() << " ";
-			}
+	} else if (flag == 2) {
+		for (int i = 0; i < n; ++i) {
+			seq->Append(rand());
 		}
 	}
 
+
+	if (buf.choosensort) {
+		auto ChSort = new ChoosenSort<int>();
+		auto seq2 = sorter(ChSort, seq, elapsed_seconds);
+		if (flag == 1) {
+			cout << "Choosen Sort " << elapsed_seconds.count() << "\n";
+			for (int i = 0; i < seq2->GetLength(); ++i) {
+				cout << seq2->Get(i) << " ";
+			}
+			cout << '\n';
+		}
+		else {
+			fout << elapsed_seconds.count() << " ";
+		}
+		delete seq2;
+	}
+
+	if (buf.qsort) {
+		auto QuickSort = new Qsort<int>();
+		auto seq2 = sorter(QuickSort, seq, elapsed_seconds);
+		if (flag == 1) {
+			cout << "Quick Sort " << elapsed_seconds.count() << "\n";
+			for (int i = 0; i < seq2->GetLength(); ++i) {
+				cout << seq2->Get(i) << " ";
+			}
+			cout << '\n';
+		}
+		else {
+			fout << elapsed_seconds.count() << " ";
+		}
+		delete seq2;
+	}
+
+	if (buf.insersort) {
+		auto InsSort = new InsertionSort<int>();
+		auto seq2 = sorter(InsSort, seq, elapsed_seconds);
+		if (flag == 1) {
+			cout << "Insertion Sort " << elapsed_seconds.count() << "\n";
+			for (int i = 0; i < seq2->GetLength(); ++i) {
+				cout << seq2->Get(i) << " ";
+			}
+			cout << '\n';
+		}
+		else {
+			fout << elapsed_seconds.count() << " ";
+		}
+		delete seq2;
+	}
+
+	if (buf.bubblesort) {
+		auto BubSort = new BubbleSort<int>();
+
+		auto seq2 = sorter(BubSort, seq, elapsed_seconds);
+		if (flag == 1) {
+			cout << "Bubble Sort " << elapsed_seconds.count() << "\n";
+			for (int i = 0; i < seq2->GetLength(); ++i) {
+				cout << seq2->Get(i) << " ";
+			}
+			cout << '\n';
+		}
+		else {
+			fout << elapsed_seconds.count() << " ";
+		}
+		delete seq2;
+	}
+
+	delete seq;
 	if (flag == 2) {
 		fout << n << '\n';
 		fout.close();
