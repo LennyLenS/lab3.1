@@ -19,9 +19,14 @@ with open("result.csv", "r") as f:
                 k += 1
 x = d['size']
 d.pop('size')
-max_time = 0
+
 fig = plt.figure(figsize = (15, 15))
-arr = list(fig.subplots(len(d)))
+arr = list()
+if len(d) == 1:
+    arr.append(fig.subplots(len(d)))
+else:
+    arr = list(fig.subplots(len(d)))
+
 j = 0
 for srt, time in d.items():
     arr[j].plot(x, time)
