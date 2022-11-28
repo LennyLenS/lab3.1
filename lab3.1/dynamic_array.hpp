@@ -22,6 +22,11 @@ public:
 	//setters
 	void Set(int index, Type value);
 	void Resize(int newSize);
+
+	//operators
+	Type& operator[] (int index) {
+		return arr[index];
+	}
 	//destructor
 	~DynamicArray() {
 		delete [] arr;

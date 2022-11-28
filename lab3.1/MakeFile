@@ -6,7 +6,7 @@ all: sorts clean
 sorts: main.o
 	$(CC) $(CFLAGS) main.o -o sorts
 
-main.o: main.cpp array_sequence.hpp dynamic_array.hpp linked_list.hpp Sequence.hpp BubbleSort.hpp ISorter.hpp ChoosenSort.hpp Qsort.hpp
+main.o: main.cpp array_sequence.hpp dynamic_array.hpp linked_list.hpp Sequence.hpp BubbleSort.hpp ISorter.hpp InsertionSort.hpp Qsort.hpp CounterSort.hpp
 	$(CC) -c main.cpp -o main.o
 
 

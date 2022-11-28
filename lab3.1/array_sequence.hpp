@@ -31,6 +31,8 @@ public:
 	void Set(Type item, int index) override;
 	ArraySequence<Type>* Concat(Sequence<Type>* list) override;
 	
+	//operators
+	Type& operator[] (int index);
 	//destructs
 	~ArraySequence() {
 		delete this->arr;
@@ -72,7 +74,7 @@ Type ArraySequence<Type>::GetLast() const {
 
 template<typename Type>
 Type ArraySequence<Type>::Get(int index) const {
-	return	this->arr->Get(index);
+	return this->arr->Get(index);
 }
 
 template<typename Type>
@@ -146,4 +148,12 @@ ArraySequence<Type>* ArraySequence<Type>::Concat(Sequence<Type>* list) {
 	}
 	return this;
 }
+
+//operators
+
+template<typename Type>
+Type& ArraySequence<Type>::operator[] (int index) {
+	return this->arr[index];
+}
+
 #endif

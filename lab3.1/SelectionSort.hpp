@@ -1,16 +1,16 @@
-#ifndef CHOOSENSORT_HPP
-#define CHOOSENSORT_HPP
+#ifndef SELECTIONSORT_HPP
+#define SELECTIONSORT_HPP
 
 #include "ISorter.hpp"
 
 template<typename Type>
-class ChoosenSort : public ISorter<Type> {
+class SelectionSort : public ISorter<Type> {
 public:
 	Sequence<Type>* SortSequence(Sequence<Type>* seq, int(*cmp) (Type, Type)) override;
 };
 
 template<typename Type>
-Sequence<Type>* ChoosenSort<Type>::SortSequence(Sequence<Type>* seq, int(*cmp) (Type, Type)) {
+Sequence<Type>* SelectionSort<Type>::SortSequence(Sequence<Type>* seq, int(*cmp) (Type, Type)) {
 	Sequence<Type>* newSeq = seq->GetCopy();
 	for (int i = 0; i < newSeq->GetLength(); ++i) {
 		int indexmin = i;
@@ -25,4 +25,4 @@ Sequence<Type>* ChoosenSort<Type>::SortSequence(Sequence<Type>* seq, int(*cmp) (
 	return newSeq;
 }
 
-#endif  //  CHOOSENSORT_HPP
+#endif  //  SELECTIONSORT 

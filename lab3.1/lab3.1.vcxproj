@@ -141,7 +141,8 @@
   <ItemGroup>
     <ClInclude Include="array_sequence.hpp" />
     <ClInclude Include="BubbleSort.hpp" />
-    <ClInclude Include="ChoosenSort.hpp" />
+    <ClInclude Include="CounterSort.hpp" />
+    <ClInclude Include="SelectionSort.hpp" />
     <ClInclude Include="dynamic_array.hpp" />
     <ClInclude Include="InsertionSort.hpp" />
     <ClInclude Include="ISorter.hpp" />

@@ -10,8 +10,9 @@
 #include "array_sequence.hpp"
 #include "list_sequence.hpp"
 #include "BubbleSort.hpp"
-#include "ChoosenSort.hpp"
+#include "SelectionSort.hpp"
 #include "InsertionSort.hpp"
+#include "CounterSort.hpp"
 #include "Qsort.hpp"
 
 using namespace std;
@@ -24,11 +25,12 @@ typedef struct parametrs {
 	bool sort = false;
 	bool test = false;
 	bool arr_seq = false, list_seq = false;
-	bool qsort = false, bubblesort = false, choosensort = false, insersort = false;
+	bool qsort = false, bubblesort = false, selecsort = false, insersort = false;
+	bool countsort = false;
 	bool error = false;
 	int start = 1000, end = 10000;
 	int step = 100;
-	vector<int> vec;
+	ArraySequence<int> *vec = nullptr;
 }parametrs;
 
 int cmp(int a, int b) {
@@ -37,7 +39,7 @@ int cmp(int a, int b) {
 
 parametrs parsing(string s) {
 	parametrs buf;
-	static const regex r("^(help|((sort|test){1}\\s*-(as|ls)\\s*(-qs|-bs|-ch|-is|\\s)*\\s*(-range\\s*(\\d+)\\s*(\\d+))?\\s*(-step\\s*(\\d+))?)|quit)$");
+	static const regex r("^(help|((sort|test){1}\\s*-(as|ls)\\s*(-qs|-bs|-sh|-is|-cs|\\s)*\\s*(-range\\s*(\\d+)\\s*(\\d+))?\\s*(-step\\s*(\\d+))?)|quit)$");
 	smatch mat;
 	
 	if (regex_search(s, mat, r)) {
@@ -73,12 +75,16 @@ parametrs parsing(string s) {
 		if (s.find("bs") != -1) {
 			buf.bubblesort = true;
 		}
-		if (s.find("ch") != -1) {
-			buf.choosensort = true;
+		if (s.find("sh") != -1) {
+			buf.selecsort = true;
 		}
 		if (s.find("is") != -1) {
 			buf.insersort = true;
 		}
+		if (s.find("cs") != -1) {
+			buf.countsort = true;
+		}
+
 
 		if (s.find("quit") != -1) {
 			buf.quit = true;
@@ -114,8 +120,8 @@ void sort(parametrs buf, int flag, int n) {
 	}
 
 	if (flag == 1) {
-		for (int i = 0; i < buf.vec.size(); ++i) {
-			seq->Append(buf.vec[i]);
+		for (int i = 0; i < buf.vec->GetLength(); ++i) {
+			seq->Append(buf.vec->Get(i));
 		}
 	} else if (flag == 2) {
 		for (int i = 0; i < n; ++i) {
@@ -124,8 +130,8 @@ void sort(parametrs buf, int flag, int n) {
 	}
 
 
-	if (buf.choosensort) {
-		auto ChSort = new ChoosenSort<int>();
+	if (buf.selecsort) {
+		auto ChSort = new SelectionSort<int>();
 		auto seq2 = sorter(ChSort, seq, elapsed_seconds);
 		if (flag == 1) {
 			cout << "Choosen Sort " << elapsed_seconds.count() << "\n";
@@ -189,6 +195,23 @@ void sort(parametrs buf, int flag, int n) {
 		delete seq2;
 	}
 
+	if (buf.countsort) {
+		auto countSort = new CounterSort<int>();
+
+		auto seq2 = sorter(countSort, seq, elapsed_seconds);
+		if (flag == 1) {
+			cout << "Counter Sort " << elapsed_seconds.count() << "\n";
+			for (int i = 0; i < seq2->GetLength(); ++i) {
+				cout << seq2->Get(i) << " ";
+			}
+			cout << '\n';
+		}
+		else {
+			fout << elapsed_seconds.count() << " ";
+		}
+		delete seq2;
+	}
+
 	delete seq;
 	if (flag == 2) {
 		fout << n << '\n';
@@ -213,16 +236,17 @@ void update(parametrs buf) {
 			-ls for list sequense \n\
 			-qs for quick sort \n\
 			-bs for bubble sort \n \
-			-ch for choosen sort \n \
+			-sh for selection sort \n \
 			-is for insertion sort \n \
+			-cs for counter sort \n \
 			-range (int) (int) default 1000 and 10000 \n \
 			-step (int) default 100 \n \
 	quit for finish programme\n";
 	} else if (buf.test) {
 		ofstream fout;
 		fout.open("result.csv");
-		if (buf.choosensort) {
-			fout << "choosen sort;";
+		if (buf.selecsort) {
+			fout << "selection sort;";
 		}
 		if (buf.qsort) {
 			fout << "qsort;";
@@ -232,6 +256,9 @@ void update(parametrs buf) {
 		}
 		if (buf.bubblesort) {
 			fout << "bubble sort;";
+		}
+		if (buf.countsort) {
+			fout << "counter sort;";
 		}
 		fout << "size\n";
 		fout.close();
@@ -264,11 +291,11 @@ int main() {
 					if (buf.sort) {
 						int n;
 						cin >> n;
-						vector<int> vec;
+						ArraySequence<int> *vec = new ArraySequence<int>();
 						for (int i = 0; i < n; ++i) {
 							int x;
 							cin >> x;
-							vec.push_back(x);
+							vec->Append(x);
 						}
 						buf.vec = vec;
 						std::getline(cin, s);
@@ -294,6 +321,8 @@ int main() {
 				requests_mutex.unlock();
 				if (buf.sort || buf.test || buf.help) {
 					update(buf);
+					if (buf.vec != nullptr)
+						delete buf.vec;
 				}
 				quit = buf.quit;
 			} while (!quit);
