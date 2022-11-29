@@ -31,6 +31,16 @@ public:
 	void InsertAt(Type item, int index);
 	void Set(Type item, int index);
 	LinkedList<Type>* Concat(LinkedList<Type>* list);
+
+	//destructor
+	~LinkedList(){
+		element* cur = start;
+		while(cur != nullptr) {
+			cur = this->start->next;
+			delete start;
+			start = cur;
+		}
+	}
 };
 
 
