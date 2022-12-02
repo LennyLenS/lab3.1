@@ -264,7 +264,6 @@ void update(parametrs buf) {
 		fout.close();
 		for (int i = buf.start; i <= buf.end; i += buf.step) {
 			sort(buf, 2, i);
-			cout << i<< endl;
 		}
 		cout << "Datasetes get!\n";
 		system("plot.py");
